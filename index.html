@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎰 Slot 969 gacor 🎰</title>
+<style>
+body { font-family: Arial, sans-serif; background: radial-gradient(circle at top, #0d0d0d, #111); color:#fff; text-align:center; margin:0; padding:0; overflow-x:hidden;}
+.hidden { display:none; }
+
+button { border:none; border-radius:12px; padding:12px 25px; font-size:16px; cursor:pointer; font-weight:bold; transition:0.3s; }
+#homePage button { background: linear-gradient(45deg, #ff00cc, #6600ff); color:#fff; font-size:24px; padding:15px 40px; box-shadow:0 5px 15px rgba(0,0,0,0.5);}
+#homePage button:hover { transform:scale(1.1); box-shadow:0 8px 25px rgba(255,0,255,0.7);}
+
+.slot-container { perspective:1200px; margin:20px auto; position:relative; z-index:1;}
+.slot { display:grid; grid-template-columns:repeat(3,100px); grid-template-rows:repeat(3,100px); gap:10px; justify-content:center;}
+.reel {
+  width:100px; height:100px; display:flex; align-items:center; justify-content:center;
+  background:#111; border-radius:15px; font-size:50px; font-weight:bold;
+  color:#0ff; box-shadow:0 0 10px #0ff inset; transform-style: preserve-3d; transition: transform 0.3s, box-shadow 0.3s;
+}
+.reel.spinning { animation:reelSpin 2.3s ease-in-out; box-shadow:0 0 20px #0ff, 0 0 40px #0ff inset; }
+.reel.win { box-shadow:0 0 25px gold, 0 0 40px yellow; transform:scale(1.2); transition: all 0.3s; }
+@keyframes reelSpin { 0% { transform: rotateX(0deg) translateY(0px); } 25% { transform: rotateX(90deg) translateY(-15px); } 50% { transform: rotateX(180deg) translateY(0px); } 75% { transform: rotateX(270deg) translateY(15px); } 100% { transform: rotateX(360deg) translateY(0px); } }
+
+.controls input, .controls button { margin:5px; padding:10px; border-radius:8px; }
+.controls button { background: linear-gradient(45deg,#ff00cc,#6600ff); color:#fff; }
+
+.money { font-size:20px; margin:10px; }
+
+.jackpot-effect { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); display:flex; align-items:center; justify-content:center; color:yellow; font-size:48px; font-weight:bold; z-index:999; animation:flash 0.5s alternate infinite; }
+@keyframes flash { from{opacity:1;} to{opacity:0.3;} }
+.petir { position:fixed; top:20px; right:20px; font-size:60px; color:yellow; text-shadow:0 0 20px #fff; animation:thunder 0.3s alternate infinite; }
+@keyframes thunder { from{transform:rotate(0);} to{transform:rotate(15deg);} }
+
+#bannerAd { width:80%; height:60px; margin:20px auto; display:flex; align-items:center; justify-content:center; font-size:18px; border-radius:12px; background:#222; color:#fff; cursor:pointer; transition:all 0.3s; }
+#bannerAd:hover { background:#444; }
+</style>
+</head>
+<body>
+
+<div id="homePage">
+  <h1>🎰 slot 969 gacor 🎰</h1>
+  <p>Saldo awal: <strong>Rp100.000</strong></p>
+  <button onclick="startGame()">Mulai Game</button>
+</div>
+
+<div id="slotPage" class="hidden">
+  <h1>🎰 slot 969 gacor 🎰</h1>
+  <div class="money">Saldo: <span id="saldoDisplay">Rp0</span></div>
+
+  <div class="controls">
+    <button onclick="ubahTaruhan(-1000)">-</button>
+    <input type="number" id="taruhan" value="1000" min="100" step="100">
+    <button onclick="ubahTaruhan(1000)">+</button>
+    <br>
+    <button id="spinBtn" onclick="spin()">SPIN</button>
+    <button onclick="multiSpin(3)">Spin 3x</button>
+    <button onclick="multiSpin(5)">Spin 5x</button>
+    <button id="autoBtn" onclick="toggleAuto()">Auto Spin: OFF</button>
+    <br><br>
+
+    <label>Top-Up Saldo: </label>
+    <input type="number" id="inputTopUp" placeholder="Rp" step="1000">
+    <button onclick="topUpInput()">Tambah Saldo</button>
+  </div>
+
+  <div class="slot-container">
+    <div class="slot" id="slot">
+      <div class="reel">🍒</div><div class="reel">🍋</div><div class="reel">🍇</div>
+      <div class="reel">🍋</div><div class="reel">🍒</div><div class="reel">🍇</div>
+      <div class="reel">🍇</div><div class="reel">🍋</div><div class="reel">🍒</div>
+    </div>
+  </div>
+</div>
+
+<div id="jackpotEffect" class="hidden">
+  <div class="jackpot-effect">💥 JACKPOT Rp4.500.000 !!! 💥</div>
+  <div class="petir">⚡</div>
+</div>
+
+<div id="bannerAd" onclick="window.open('https://example.com','_blank')">🌟 Promo Spesial! Klik untuk info 🌟</div>
+
+<script>
+let saldo=0,reels=null,autoSpin=false;
+const simbols=["🍒","🍋","🍇","🍉","⭐","7️⃣"];
+const jackpotChance = 0.05; // tetap 5%
+
+function formatRupiah(a){return "Rp"+a.toString().replace(/\B(?=(\d{3})+(?!\d))/g,".");}
+
+function saveGame(){
+  localStorage.setItem("slotSaldo", saldo);
+  localStorage.setItem("slotTaruhan", document.getElementById("taruhan").value);
+}
+
+function loadGame(){
+  let s=parseInt(localStorage.getItem("slotSaldo"));
+  let t=parseInt(localStorage.getItem("slotTaruhan"));
+  saldo = isNaN(s)?100000:s;
+  document.getElementById("saldoDisplay").innerText=formatRupiah(saldo);
+  if(!isNaN(t)) document.getElementById("taruhan").value=t;
+}
+
+function startGame(){
+  document.getElementById("homePage").classList.add("hidden");
+  document.getElementById("slotPage").classList.remove("hidden");
+  reels=document.querySelectorAll(".reel");
+  loadGame();
+}
+
+function ubahTaruhan(v){
+  let t=document.getElementById("taruhan");
+  t.value=Math.max(100, parseInt(t.value)+v);
+  saveGame();
+}
+
+function topUpInput(){
+  let i=document.getElementById("inputTopUp");
+  let t=parseInt(i.value);
+  if(isNaN(t)||t<=0){alert("Jumlah top-up tidak valid!"); return;}
+  saldo+=t;
+  document.getElementById("saldoDisplay").innerText=formatRupiah(saldo);
+  saveGame();
+  alert("✅ Top-Up berhasil! Saldo sekarang: "+formatRupiah(saldo));
+  i.value="";
+}
+
+async function spinInternal(){
+  let t=parseInt(document.getElementById("taruhan").value);
+  if(saldo<t){ alert("Saldo tidak cukup!"); return;}
+
+  reels.forEach(r=>{r.classList.remove("win"); r.classList.add("spinning");});
+  let hasil=[];
+  
+  let isMenang = Math.random() < 0.5;  
+  let simbolMenang = simbols[Math.floor(Math.random()*simbols.length)];
+
+  if (isMenang && Math.random() < jackpotChance) {
+    simbolMenang = "7️⃣";
+  }
+
+  for(let i=0;i<reels.length;i++){
+    await new Promise(res=>{
+      let r=reels[i];
+      let dur=2300+i*50;
+      let interval=setInterval(()=>{ r.innerText=simbols[Math.floor(Math.random()*simbols.length)]; },100);
+      setTimeout(()=>{
+        clearInterval(interval);
+        let s;
+        if(isMenang){
+          s = simbolMenang;
+        } else {
+          do {
+            s = simbols[Math.floor(Math.random()*simbols.length)];
+          } while(i===reels.length-1 && hasil.every(x=>x===s));
+        }
+        r.innerText=s;
+        hasil[i]=s;
+        res();
+      }, dur);
+    });
+  }
+
+  reels.forEach(r=>r.classList.remove("spinning"));
+  cekMenang(hasil,t);
+  saveGame();
+}
+
+async function spin(){ 
+  const b=document.getElementById("spinBtn"); 
+  if(b.disabled) return; 
+  b.disabled=true; 
+  await spinInternal(); 
+  b.disabled=false;
+}
+
+async function multiSpin(n) {
+  for (let i = 0; i < n; i++) {
+    let t = parseInt(document.getElementById("taruhan").value);
+    if (saldo < t) {
+      alert("Saldo tidak cukup untuk melanjutkan spin!");
+      break;
+    }
+    await spinInternal(); 
+    await new Promise(r => setTimeout(r, 800)); 
+  }
+}
+
+function toggleAuto(){ 
+  autoSpin=!autoSpin; 
+  document.getElementById("autoBtn").innerText="Auto Spin: "+(autoSpin?"ON":"OFF"); 
+  if(autoSpin) autoLoop();
+}
+
+async function autoLoop(){ 
+  while(autoSpin){ 
+    let t = parseInt(document.getElementById("taruhan").value);
+    if (saldo < t) {
+      alert("Saldo habis! Auto Spin dihentikan.");
+      autoSpin = false;
+      document.getElementById("autoBtn").innerText="Auto Spin: OFF";
+      break;
+    }
+    await spinInternal(); 
+    await new Promise(r=>setTimeout(r,800)); 
+  }
+}
+
+function cekMenang(hasil,taruhan){
+  let simbolUtama=hasil[0];
+  let menang=hasil.every(s=>s===simbolUtama);
+  if(menang){
+    let reward=(simbolUtama==="7️⃣")?4500000:taruhan*2;
+    saldo+=reward;
+    document.getElementById("saldoDisplay").innerText=formatRupiah(saldo);
+    reels.forEach(r=>r.classList.add("win"));
+    if(simbolUtama==="7️⃣"){ tampilJackpot(); }
+    alert("🎉 Menang! Dapat "+formatRupiah(reward));
+  } else {
+    saldo-=taruhan;
+    document.getElementById("saldoDisplay").innerText=formatRupiah(saldo);
+  }
+}
+
+function tampilJackpot(){ 
+  const j=document.getElementById("jackpotEffect"); 
+  j.classList.remove("hidden"); 
+  setTimeout(()=>{ j.classList.add("hidden"); },3000);
+}
+</script>
+</body>
+</html>
